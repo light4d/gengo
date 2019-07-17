@@ -96,7 +96,7 @@ func (m *{{ .ShortName }}) Type() rosgo.MessageType {
 	return Msg{{ .ShortName }}
 }
 
-func (m *{{ .ShortName }}) Marshal(buf *bytes.Buffer) error {
+func (m *{{ .ShortName }}) Marshal(buf *bytes.Buffer) ([]byte,error) {
     var err error = nil
 {{- range .Fields }}
 {{-     if .IsArray }}
@@ -115,8 +115,8 @@ func (m *{{ .ShortName }}) Marshal(buf *bytes.Buffer) error {
 {{-                end }}
 {{-             end }}
 {{-         else }}
-        if err = e.Marshal(buf); err != nil {
-            return err
+        if _,err = e.Marshal(buf); err != nil {
+            return nil,err
         }
 {{-         end }}
     }
@@ -134,13 +134,13 @@ func (m *{{ .ShortName }}) Marshal(buf *bytes.Buffer) error {
 {{-                 end }}
 {{-             end }}
 {{-         else }}
-    if err = m.{{ .GoName }}.Marshal(buf); err != nil {
-        return err
+    if _,err = m.{{ .GoName }}.Marshal(buf); err != nil {
+        return nil,err
     }
 {{-         end }}
 {{-     end }}
 {{- end }}
-    return err
+    return buf.Bytes(),err
 }
 
 
