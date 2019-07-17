@@ -96,7 +96,7 @@ func (m *{{ .ShortName }}) Type() rosgo.MessageType {
 	return Msg{{ .ShortName }}
 }
 
-func (m *{{ .ShortName }}) Serialize(buf *bytes.Buffer) error {
+func (m *{{ .ShortName }}) Marshal(buf *bytes.Buffer) error {
     var err error = nil
 {{- range .Fields }}
 {{-     if .IsArray }}
@@ -115,7 +115,7 @@ func (m *{{ .ShortName }}) Serialize(buf *bytes.Buffer) error {
 {{-                end }}
 {{-             end }}
 {{-         else }}
-        if err = e.Serialize(buf); err != nil {
+        if err = e.Marshal(buf); err != nil {
             return err
         }
 {{-         end }}
@@ -134,7 +134,7 @@ func (m *{{ .ShortName }}) Serialize(buf *bytes.Buffer) error {
 {{-                 end }}
 {{-             end }}
 {{-         else }}
-    if err = m.{{ .GoName }}.Serialize(buf); err != nil {
+    if err = m.{{ .GoName }}.Marshal(buf); err != nil {
         return err
     }
 {{-         end }}
@@ -144,7 +144,7 @@ func (m *{{ .ShortName }}) Serialize(buf *bytes.Buffer) error {
 }
 
 
-func (m *{{ .ShortName }}) Deserialize(buf *bytes.Reader) error {
+func (m *{{ .ShortName }}) Unmarshal(buf *bytes.Reader) error {
     var err error = nil
 {{- range .Fields }}
 {{-    if .IsArray }}
@@ -188,7 +188,7 @@ func (m *{{ .ShortName }}) Deserialize(buf *bytes.Reader) error {
 {{-                  end }}
 {{-              end }}
 {{-          else }}
-            if err = m.{{ .GoName }}[i].Deserialize(buf); err != nil {
+            if err = m.{{ .GoName }}[i].Unmarshal(buf); err != nil {
                 return err
             }
 {{-      	end }}
@@ -226,7 +226,7 @@ func (m *{{ .ShortName }}) Deserialize(buf *bytes.Reader) error {
 {{-         			end }}
 {{-            end }}
 {{-        else }}
-    if err = m.{{ .GoName }}.Deserialize(buf); err != nil {
+    if err = m.{{ .GoName }}.Unmarshal(buf); err != nil {
         return err
     }
 {{-    	  end }}
