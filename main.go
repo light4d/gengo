@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/light4d/gengo/gengo"
@@ -17,6 +18,10 @@ var (
 
 func writeCode(fullname string, code string) error {
 	nameComponents := strings.Split(fullname, "/")
+	if len(nameComponents) < 2 {
+		fmt.Println(fullname + " require a folder,such as test/" + fullname)
+		return errors.New(fullname + " require a folder,such as test/" + fullname)
+	}
 	pkgDir := filepath.Join(*out, nameComponents[0])
 	if _, err := os.Stat(pkgDir); os.IsNotExist(err) {
 		err = os.MkdirAll(pkgDir, os.ModeDir|os.FileMode(0775))
@@ -50,7 +55,9 @@ func main() {
 	}
 
 	rosPkgPath := os.Getenv("ROS_PACKAGE_PATH")
-
+	if rosPkgPath == "" {
+		fmt.Println("ROS_PACKAGE_PATH not defined")
+	}
 	context, err := gengo.NewMsgContext(strings.Split(rosPkgPath, ":"))
 	if err != nil {
 		fmt.Println(err)
