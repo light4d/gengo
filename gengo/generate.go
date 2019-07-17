@@ -18,7 +18,7 @@ import (
 	"{{ . }}"
 {{- end }}
 
-    "github.com/fetchrobotics/rosgo/ros"
+    "github.com/light4d/rosgo"
 )
 
 {{- if gt (len .Constants) 0 }}
@@ -52,7 +52,7 @@ func (t *_Msg{{ .ShortName }}) MD5Sum() string {
     return t.md5sum
 }
 
-func (t *_Msg{{ .ShortName }}) NewMessage() ros.Message {
+func (t *_Msg{{ .ShortName }}) NewMessage() rosgo.Message {
     m := new({{ .ShortName }})
 {{- range .Fields }}
 {{-     if .IsArray }}
@@ -92,7 +92,7 @@ type {{ .ShortName }} struct {
 {{- end }}
 }
 
-func (m *{{ .ShortName }}) Type() ros.MessageType {
+func (m *{{ .ShortName }}) Type() rosgo.MessageType {
 	return Msg{{ .ShortName }}
 }
 
@@ -240,7 +240,7 @@ var srvTemplate = `
 // Automatically generated from the message definition "{{ .FullName }}.srv"
 package {{ .Package }}
 import (
-    "github.com/fetchrobotics/rosgo/ros"
+    "github.com/light4d/rosgo"
 )
 
 // Service type metadata
@@ -248,16 +248,16 @@ type _Srv{{ .ShortName }} struct {
     name string
     md5sum string
     text string
-    reqType ros.MessageType
-    resType ros.MessageType
+    reqType rosgo.MessageType
+    resType rosgo.MessageType
 }
 
 func (t *_Srv{{ .ShortName }}) Name() string { return t.name }
 func (t *_Srv{{ .ShortName }}) MD5Sum() string { return t.md5sum }
 func (t *_Srv{{ .ShortName }}) Text() string { return t.text }
-func (t *_Srv{{ .ShortName }}) RequestType() ros.MessageType { return t.reqType }
-func (t *_Srv{{ .ShortName }}) ResponseType() ros.MessageType { return t.resType }
-func (t *_Srv{{ .ShortName }}) NewService() ros.Service {
+func (t *_Srv{{ .ShortName }}) RequestType() rosgo.MessageType { return t.reqType }
+func (t *_Srv{{ .ShortName }}) ResponseType() rosgo.MessageType { return t.resType }
+func (t *_Srv{{ .ShortName }}) NewService() rosgo.Service {
     return new({{ .ShortName }})
 }
 
@@ -277,8 +277,8 @@ type {{ .ShortName }} struct {
     Response {{ .ShortName }}Response
 }
 
-func (s *{{ .ShortName }}) ReqMessage() ros.Message { return &s.Request }
-func (s *{{ .ShortName }}) ResMessage() ros.Message { return &s.Response }
+func (s *{{ .ShortName }}) ReqMessage() rosgo.Message { return &s.Request }
+func (s *{{ .ShortName }}) ResMessage() rosgo.Message { return &s.Response }
 `
 
 type MsgGen struct {
